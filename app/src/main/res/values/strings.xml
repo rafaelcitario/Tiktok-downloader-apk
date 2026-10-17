@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Baixador HQ</string>
+    <string name="share_label">Baixador HQ</string>
+    <string name="tile_label">Baixar link</string>
+    <string name="accessibility_description">Usado apenas para perceber quando você toca em \"Copiar link\" no TikTok e, só então, conferir se há um link novo na área de transferência, mesmo com o app em segundo plano. O serviço só recebe eventos do app do TikTok, olha apenas o nome do botão tocado, não lê o conteúdo da tela, não guarda nem envia nada e não toca em nada.</string>
+</resources>
