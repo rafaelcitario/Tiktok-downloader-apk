@@ -1,0 +1,46 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write # publicar o APK na aba "Releases"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      - name: Build debug APK
+        run: gradle assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BaixadorHQ-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      # Deixa o APK na aba "Releases" do repositório: dá para baixar direto pelo celular.
+      - name: Publish APK to the "latest" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk BaixadorHQ.apk
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest BaixadorHQ.apk \
+            --title "Baixador HQ (APK)" \
+            --notes "APK de teste (debug). Baixe, abra no celular e permita a instalação de apps desta fonte." \
+            --target "$GITHUB_SHA"
